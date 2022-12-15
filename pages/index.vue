@@ -1,11 +1,18 @@
-<template>
-  <Tutorial/>
-</template>
-
 <script lang="ts">
-import Vue from 'vue'
+import CloudTwitter from '../components/CloudTwitter.vue'
+import { defineComponent } from '@nuxtjs/composition-api'
+import 'normalize.css'
 
-export default Vue.extend({
-  name: 'IndexPage'
+export default defineComponent({
+  components: {
+    CloudTwitter
+  },
+  setup() {
+    
+  },
 })
 </script>
+
+<template>
+  <CloudTwitter />
+</template>
