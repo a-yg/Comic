@@ -1,8 +1,12 @@
 <script>
 import { defineComponent, ref, onMounted, useRouter, useRoute, watch } from '@nuxtjs/composition-api'
 import axios from 'axios'
+import CloudTwitter from './CloudTwitter.vue'
 
 export default defineComponent({
+  components: {
+    CloudTwitter
+  },
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -12,6 +16,7 @@ export default defineComponent({
     const worldUrl = ref("https://winter2022.vketcloud.com/general/main.html?worldid=jrcentral&multi=1&roomid=pub_lz4yXcxiNVeot2SRf2")
     const selectVenue = ref("accusamus beatae ad facilis cum similique qui sunt") 
     const workId = ref()
+    const ticket = ref(require("../assets/img/ticket_base.png"))
     
     onMounted( async() => {
       const url = "https://jsonplaceholder.typicode.com/photos"
@@ -48,7 +53,7 @@ export default defineComponent({
           img1.value = require("../assets/img/bg_01_disneyplus.jpg")
           img2.value = require("../assets/img/bg_02_disneyplus.jpg")
           worldUrl.value = "https://winter2022.vket.com/world"
-
+          ticket.value = require("../assets/img/ticket_base_selected.png")
           break
         }
         case 'beams': {
@@ -64,7 +69,7 @@ export default defineComponent({
     watch(route, () => {
       console.log(route, "route@@@@@@")
       handleChangeImage()
-  })
+    })
     
     return {
       data,
@@ -73,7 +78,8 @@ export default defineComponent({
       onClick,
       workId,
       selectVenue,
-      worldUrl
+      worldUrl,
+      ticket,
     }
   },
 })
@@ -106,7 +112,7 @@ export default defineComponent({
     </p>
     <ul>
     <li class="ticketItems" v-for="i in data" :key="i.i" @click="onClick(i.id)">
-      <img class="baseimg" src="../assets/img/ticket_base.png" alt="">
+      <img class="baseimg" :src="ticket">
       <div class="ticket">
         <div class="image">
           <img :src="i.url" alt="">
@@ -119,6 +125,7 @@ export default defineComponent({
     </li>
     </ul>
   </div>
+<CloudTwitter />
 </div>
 </template>
 
@@ -248,15 +255,14 @@ ul {
 	animation: change-img-anim 4s infinite;
 }
 .img:nth-of-type(1) {
-	animation-delay: 2s;
+	animation-delay: 0s;
 }
 .img:nth-of-type(2) {
 	animation-delay: 2s;
 }
 @keyframes change-img-anim {
 	0%{ opacity: 0;}
-	70%{ opacity: 1;}
-	90%{ opacity: 1;}
+	50%{ opacity: 1;}
 	100%{ opacity: 0;}
 }
 .message {

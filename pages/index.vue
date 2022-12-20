@@ -1,15 +1,15 @@
 <script lang="ts">
-import CloudTwitter from '../components/CloudTwitter.vue'
-// import CloudMain from '../components/CloudMain.vue'
-import CloudWorld from '../components/CloudWorld.vue'
+// import CloudTwitter from '../components/CloudTwitter.vue'
+// import CloudWorld from '../components/CloudWorld.vue'
+import ComicTop from '../pages/ComicTop.vue'
 import { defineComponent } from '@nuxtjs/composition-api'
 import 'normalize.css'
 
 export default defineComponent({
   components: {
-    CloudTwitter,
-    // CloudMain,
-    CloudWorld
+    // CloudTwitter,
+    // CloudWorld,
+    ComicTop
   },
   setup() {
     
@@ -19,8 +19,8 @@ export default defineComponent({
 
 <template>
   <div>
-    <!-- <CloudMain /> -->
-    <CloudWorld />
-    <CloudTwitter />
+    <!-- <CloudWorld />
+    <CloudTwitter /> -->
+    <ComicTop />
   </div>
 </template>

@@ -13,7 +13,6 @@ export default defineComponent({
       selectVenue.value = params.title
       console.log(selectVenue.value, 'value')
     }
-
     return {
       onClick,
       selectVenue,
@@ -29,7 +28,7 @@ export default defineComponent({
     </p>
     <ul>
     <li class="ticketItems" v-for="i in data" :key="i.i" @click="onClick(i.id)">
-      <img class="baseimg" src="../assets/img/ticket_base.png" alt="">
+      <img class="baseimg">
       <div class="ticket">
         <div class="img">
           <img :src="i.url" alt="">
