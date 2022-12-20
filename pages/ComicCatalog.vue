@@ -1,8 +1,11 @@
 <script>
 import { computed, defineComponent, onMounted, ref, useRouter } from '@nuxtjs/composition-api'
-import axios from 'axios'
+import ComicHeader from './ComicHeader.vue'
 
 export default defineComponent({
+  components:{
+    ComicHeader
+  },
   setup() {
     const currentImageIndex =ref(0)
     const items = ref([
@@ -96,6 +99,8 @@ export default defineComponent({
 </script>
 
 <template>
+<div>
+<ComicHeader />
 <div class="bgimg" :style="{ backgroundImage: 'url(' + currentImageUrl.bgimg + ')' }">
   <div class="container">
     <div class="stamp">
@@ -126,6 +131,7 @@ export default defineComponent({
       </ul>
     </div>
   </div>
+</div>
 </div>
 </template>
 

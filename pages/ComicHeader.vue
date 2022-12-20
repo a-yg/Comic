@@ -2,6 +2,7 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 import HeaderFocus from '../components/HeaderFocus.vue'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import 'normalize.css'
 
 export default defineComponent({
   components: {
@@ -23,6 +24,7 @@ export default defineComponent({
         <HeaderFocus />
         <li class="item"><a href=""><span>EVENT</span><span class="textsub">イベント</span></a></li>
         <li class="item"><a href="https://winter2022.vket.com/contact"><span>CONTACT</span><span class="textsub">お問い合わせ</span></a></li>
+        <li class="item"><router-link to="/cloudworld"><span>VKETCLOUD</span><span class="textsub">メタバース空間</span></router-link></li>
       </ul>
       <ul class="log">
         <li class="button">

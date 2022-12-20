@@ -1,10 +1,12 @@
 <script>
 import { defineComponent, ref, onMounted, useRouter, useRoute, watch } from '@nuxtjs/composition-api'
 import axios from 'axios'
-import CloudTwitter from './CloudTwitter.vue'
+import ComicHeader from './ComicHeader.vue'
+import CloudTwitter from '../components/CloudTwitter.vue'
 
 export default defineComponent({
   components: {
+    ComicHeader,
     CloudTwitter
   },
   setup() {
@@ -87,6 +89,7 @@ export default defineComponent({
 
 <template>
 <div>
+  <ComicHeader />
   <div class="main">
       <img class="img" id="slide_img" :src="img1" alt="">
       <img class="img" :src="img2"  alt="">
