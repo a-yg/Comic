@@ -1,13 +1,13 @@
 <script lang="ts">
-import ComicHeader from './ComicHeader.vue'
 import ComicCatalog from './ComicCatalog.vue'
+// import Cloudworld from './CloudWorld.vue'
 import { defineComponent } from '@nuxtjs/composition-api'
 import 'normalize.css'
 
 export default defineComponent({
   components: {
-    ComicHeader,
     ComicCatalog
+    // Cloudworld
   },
   setup() {
     
@@ -17,7 +17,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <ComicHeader />
     <ComicCatalog />
+    <!-- <Cloudworld /> -->
   </div>
 </template>

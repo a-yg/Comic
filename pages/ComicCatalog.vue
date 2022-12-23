@@ -1,25 +1,63 @@
 <script>
 import { computed, defineComponent, onMounted, ref, useRouter } from '@nuxtjs/composition-api'
 import ComicHeader from './ComicHeader.vue'
+import ComicSearch from '../components/ComicSearch.vue'
+
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 export default defineComponent({
   components:{
-    ComicHeader
+    ComicHeader,
+    ComicSearch
   },
   setup() {
+    const check = ref("aa")
+    const saleCheck = ref(true)
+    const text = ref("出展物のキーワードを入力")
+
     const currentImageIndex =ref(0)
     const items = ref([
       {
         id: 1,
         bgimg : require("../assets/img/paris.jpg"),
         title: "企業 | PC（VRChat）",
-        world: "パラリアルパリ"
+        world: "パラリアルパリ",
+        genre: "1"
       },
       {
         id: 2,
         bgimg: require("../assets/img/nagoya.jpg"),
         title: "企業 | PC（VRChat）",
-        world: "パラリアル名古屋"
+        world: "パラリアル名古屋",
+        genre: "1"
+      },
+      {
+        id: 8,
+        bgimg: require("../assets/img/nagoya.jpg"),
+        title: "企業 | PC（VRChat）",
+        world: "aaa",
+        genre: "2"
+      },
+      {
+        id: 9,
+        bgimg: require("../assets/img/nagoya.jpg"),
+        title: "企業 | PC（VRChat）",
+        world: "bbb",
+        genre: "2"
+      },
+      {
+        id: 10,
+        bgimg: require("../assets/img/nagoya.jpg"),
+        title: "企業 | PC（VRChat）",
+        world: "ccc",
+        genre: "3"
+      },
+      {
+        id: 11,
+        bgimg: require("../assets/img/nagoya.jpg"),
+        title: "企業 | PC（VRChat）",
+        world: "ddd",
+        genre: "4"
       }
     ])
     const items2 = ref([
@@ -50,6 +88,49 @@ export default defineComponent({
         }
       },
     ])
+
+    // ラジオボタンによって表示変更
+    const switchSale = () => {
+      console.log(check.value, "check")
+      if (check.value == "bb") {
+        saleCheck.value = false
+        text.value = "サークルのキーワードを入力"
+      } else {
+        saleCheck.value = true
+        text.value = "出展物のキーワードを入力"
+      }
+    }
+
+    // 検索フォームとセレクトボックス
+    const searchKeyword = ref('');
+    const selectedFilterItem = ref('');
+    const filteredItems = ref(items.value);
+    const searchItem = () => {
+      console.log(searchKeyword.value, "searchKeyword.value")
+      console.log(selectedFilterItem.value, "selectedFilterItem.value")
+      if (!searchKeyword.value && !selectedFilterItem.value) return
+
+      // if(searchKeyword.value && selectedFilterItem.value) {
+      //   filteredItems.value = items.value.filter((item) => {
+      //     return item.world.includes(searchKeyword.value);
+      //   }).filter((item) => {
+      //     return item.title.includes(searchKeyword.value)
+      //   })
+      //   return;
+      // }
+      
+      if(searchKeyword.value) {
+        filteredItems.value = items.value.filter((item) => {
+          return item.world.includes(searchKeyword.value);
+        })
+      }
+
+      if(selectedFilterItem.value) {
+        filteredItems.value = items.value.filter((item) => {
+          return item.genre.includes(selectedFilterItem.value);
+        })
+      }
+    }
 
     // クリック時にid取って画面遷移
     const router = useRouter()
@@ -86,13 +167,22 @@ export default defineComponent({
 
     
     return {
+      check,
+      saleCheck,
+      switchSale,
+      text,
       items,
       items2,
+      searchKeyword,
+      selectedFilterItem,
+      filteredItems,
+      searchItem,
+
       onClick,
       onText1Click,
       onText2Click,
       currentImageUrl,
-      imageMouseOver
+      imageMouseOver,
     }
   },
 })
@@ -100,7 +190,44 @@ export default defineComponent({
 
 <template>
 <div>
-<ComicHeader />
+<ComicHeader style="box-shadow: none"/>
+<div class="class">
+    <div class="radio">
+      <input type="radio" value="aa" id="aa" v-model="check" @change="switchSale">
+      <label for="aa">出展物</label>
+      <input type="radio" value="bb" id="bb" v-model="check" @change="switchSale">
+      <label for="bb">サークル</label>
+    </div>
+    <div class="search">
+      <input type="text" :placeholder="text" v-model="searchKeyword" @keydown.enter="searchItem">
+      <button @click="searchItem"><i class="bi bi-search"></i></button>
+    </div>
+    <div class="select">
+      <label for="">絞り込み</label>
+      <select name="item" id="item" v-model="selectedFilterItem" @change="searchItem">
+        <option value="">---Select---</option>
+        <option disabled="disabled" value="0">---キャラクター---</option>
+        <option value="1">人間</option>
+        <option value="2">亜人</option>
+        <option value="3">魔物</option>
+        <option disabled="disabled" value="0">---装飾品---</option>
+        <option value="4">衣装</option>
+        <option value="5">髪型</option>
+        <option value="6">アクセサリー</option>
+      </select>
+    </div>
+    <div class="check">
+      <div v-if="saleCheck">
+        <input type="checkbox" id="check" class="checkbox">
+        <label for="check">販売している<br>出展物のみ</label>
+      </div>
+    </div>
+    <div class="button">
+      <a href="">♡ お気に入り</a>
+    </div>
+  </div>
+
+
 <div class="bgimg" :style="{ backgroundImage: 'url(' + currentImageUrl.bgimg + ')' }">
   <div class="container">
     <div class="stamp">
@@ -110,7 +237,7 @@ export default defineComponent({
     </div>
     <div>
       <ul class="world-item">
-          <li class="items" v-for="item in items" :key="item.item" @click="onClick(item.id)">
+          <li class="items" v-for="item in filteredItems" :key="item.id" @click="onClick(item.id)">
             <img :src="item.bgimg">
             <p class="title">{{item.title}}</p>
             <p class="world"><span>{{item.world}}</span></p>
@@ -136,6 +263,144 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.class {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+    background-color: #f5f5f5;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
+    position: sticky;
+    top: 80px;
+    z-index: 3;
+    height: 60px;
+}
+
+.radio > label {
+  font-size: 14px;
+  color: #333;
+  margin-right: 8px;
+}
+.radio > input {
+  /* radioボタンのサイズ変更 */
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+.search {
+  position: relative;
+  width: 320px;
+}
+.search > input {
+  width: 290px;
+  height: 25px;
+  padding: 8px 16px;
+}
+.search > button {
+  position: absolute;
+  right: -7px;
+  top: 0;
+  height: -webkit-fill-available;
+  width: 60px;
+  background: #1845c2;
+  border-radius: 5px;
+  border: none;
+}
+
+.select > label {
+  font-size: 14px;
+  color: #333;
+}
+.select > select {
+  width: 280px;
+  height: 44px;
+  font-size: 14px;
+  padding: 8px 16px;
+  appearance: none;
+}
+
+.check {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 8px;
+  width: 105px;
+  position: relative;
+}
+/* checkbox初期化 */
+input[type='checkbox'] {
+  appearance: none;
+  outline: none;
+
+  display: block;
+  text-align: center;
+  cursor: pointer;
+}
+/* checkboxのデザイン */
+input[type='checkbox']::before {
+  display: block;
+  position: absolute;
+  top: 6px;
+  left: 0;
+  content: '';
+
+  width: 14px;
+  height: 14px;
+  background: transparent;
+  border: 3px solid #757575;
+  border-radius: 3px;
+}
+/* checkboxmのチェックのデザイン */
+input[type='checkbox']::after {
+  display: block;
+
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 7px;
+
+  width: 6px;
+  height: 10px;
+  border-right: 4px solid blue;
+  border-bottom: 4px solid blue;
+  transform: rotate(45deg);
+
+  opacity: 0;
+}
+/* チェックするとチェックマークの透明化を解除 */
+input[type='checkbox']:checked::after {
+  opacity: 1;
+}
+
+.check > div > label {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: pre-wrap;
+}
+
+
+.button {
+    border: 2px solid #999;
+    border-radius: 8px;
+    display: block;
+    height: 40px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    margin-left: 70px;
+}
+.button > a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+
+
+
+
 ul {
   list-style-type: none;
   margin: 0;

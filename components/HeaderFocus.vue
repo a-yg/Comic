@@ -62,7 +62,7 @@ export default defineComponent({
 <template>
     <li class="item" @mouseover="mouseover" @mouseleave="mouseleave">
         <router-link to="/ComicCatalog">
-          <span>CATALOG</span>
+          <span class="title">CATALOG</span>
           <span class="textsub">カタログ</span>
         </router-link>
 
@@ -104,10 +104,23 @@ ul {
 .subitem {
   text-align: center;
 }
+.title {
+  display: flex;
+  align-items: center;
+}
 .textsub {
   font-size: 12px;
+  margin-top: 4px;
 }
-
+.item > a:hover {
+  color: #1845c2;
+}
+.item > a {
+  height: 100%;
+}
+.title {
+  margin-top: 18px;
+}
 .subitems, .list {
   display: flex;
   justify-content: left;

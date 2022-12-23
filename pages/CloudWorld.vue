@@ -19,6 +19,7 @@ export default defineComponent({
     const selectVenue = ref("accusamus beatae ad facilis cum similique qui sunt") 
     const workId = ref()
     const ticket = ref(require("../assets/img/ticket_base.png"))
+    const selectedItem = ref(0);
     
     onMounted( async() => {
       const url = "https://jsonplaceholder.typicode.com/photos"
@@ -35,15 +36,18 @@ export default defineComponent({
     // クリック時にqueryの変更
     const onClick = (id) => {
       const params = data.value.find(obj => id == obj.id)
+      console.log(params, "params")
       selectVenue.value = params.title
       switch(params.id) {
         case 1:
-          router.push({path: '/', query:{ work_id:'disneyplus' }})
+          router.push({path: '/cloudworld', query:{ work_id:'disneyplus' }})
           break
         case 2:
-          router.push({path: '/', query:{ work_id:'beams' }})
+          router.push({path: '/cloudworld', query:{ work_id:'beams' }})
           break
       }
+      console.log(id);
+      selectedItem.value = id;
     }
     
     // queryに対して画像の変更
@@ -55,7 +59,6 @@ export default defineComponent({
           img1.value = require("../assets/img/bg_01_disneyplus.jpg")
           img2.value = require("../assets/img/bg_02_disneyplus.jpg")
           worldUrl.value = "https://winter2022.vket.com/world"
-          ticket.value = require("../assets/img/ticket_base_selected.png")
           break
         }
         case 'beams': {
@@ -82,6 +85,7 @@ export default defineComponent({
       selectVenue,
       worldUrl,
       ticket,
+      selectedItem,
     }
   },
 })
@@ -115,7 +119,7 @@ export default defineComponent({
     </p>
     <ul>
     <li class="ticketItems" v-for="i in data" :key="i.i" @click="onClick(i.id)">
-      <img class="baseimg" :src="ticket">
+      <div class="ticket__img" :class="{'selected_ticket': i.id === selectedItem}"></div>
       <div class="ticket">
         <div class="image">
           <img :src="i.url" alt="">
@@ -135,11 +139,11 @@ export default defineComponent({
 <style scoped>
 .container {
   width: 465px;
+  height: 910px;
   background-color: rgba(0,0,0,0.5);
   position: absolute;
   right: 0;
-  top: 0;
-  padding-bottom: 32px;
+  top: 80px;
   opacity: 1;
 }
 ul {
@@ -255,13 +259,13 @@ ul {
 	width: 100%;
   height: 100%;
 	opacity: 0;
-	animation: change-img-anim 4s infinite;
+	animation: change-img-anim 8s infinite;
 }
 .img:nth-of-type(1) {
 	animation-delay: 0s;
 }
 .img:nth-of-type(2) {
-	animation-delay: 2s;
+	animation-delay: 4s;
 }
 @keyframes change-img-anim {
 	0%{ opacity: 0;}
@@ -276,4 +280,17 @@ ul {
 .message > img {
   width: 488px;
 }
+
+.ticket__img {
+  width:auto;
+  height: 100px;
+  background-size: contain;
+  background-image: url(../assets/img/ticket_base.png);
+}
+
+.selected_ticket {
+  background-image: url(../assets/img/ticket_base_selected.png);
+  transition: all 0.2 ease
+}
+
 </style>
