@@ -28,10 +28,10 @@ export default defineComponent({
     const selectItems = ref("")
     const router = useRouter()
     const search = () => {
-      if (check.value = "aa" && searchKeyword.value || selectItems.value) {
+      if (check.value === "aa" && searchKeyword.value || selectItems.value) {
         router.push({path:'/hitcircle', query:{target:"item", searchWord: searchKeyword.value, category: selectItems.value}})
       }
-      if (check.value = "bb" && searchKeyword.value || selectItems.value) {
+      if (check.value === "bb" && searchKeyword.value || selectItems.value) {
         router.push({path:'/hitcircle', query:{target:"circle", searchWord: searchKeyword.value, category: selectItems.value}})
       }
     }
