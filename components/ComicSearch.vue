@@ -1,9 +1,12 @@
 <script>
-import { computed, defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import { computed, defineComponent, onMounted, ref, useRouter, useRoute, watch } from '@nuxtjs/composition-api'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 export default defineComponent({
   setup() {
+    onMounted(() => {
+      pageChange()
+    })
     const check = ref("aa")
     const saleCheck = ref(true)
     const text = ref("出展物のキーワードを入力")
@@ -20,25 +23,53 @@ export default defineComponent({
       }
     }
     // 検索機能
-    const keyword = ref()
-    const items = props.items
-    const filterKeyword = computed(() => {
-      for(let i in items.value) {
-        let item = items.value[i]
-        if(item.world.indexOf(keyword.value) !== -1) {
-          items.value.push(items)
-        }
+    const searchKeyword = ref('')
+    const searchItems = ref("")
+    const selectItems = ref("")
+    const router = useRouter()
+    const search = () => {
+      if (check.value = "aa" && searchKeyword.value || selectItems.value) {
+        router.push({path:'/hitcircle', query:{target:"item", searchWord: searchKeyword.value, category: selectItems.value}})
       }
+      if (check.value = "bb" && searchKeyword.value || selectItems.value) {
+        router.push({path:'/hitcircle', query:{target:"circle", searchWord: searchKeyword.value, category: selectItems.value}})
+      }
+    }
+
+    //ページ遷移時の表示(初期表示)
+    const route = useRoute()
+    const pageChange = () => {
+      //チェックボックス
+      if(route.value.query['target'] == "item") {
+        check.value = "aa"
+      } else if (route.value.query['target'] == "circle") {
+        check.value = "bb"
+      } else {
+        check.value = "aa"
+      }
+      //検索フォーム
+      searchKeyword.value = route.value.query['searchWord']
+      //セレクトボックス
+      if (route.value.query['category']) {
+        selectItems.value = route.value.query['category'] 
+      } else {
+        selectItems.value = ""
+      }
+    }
+    watch(route, () => {
+      pageChange()
     })
-    
+
     return {
       check,
       saleCheck,
       switchSale,
       text,
-      items,
-      keyword,
-      filterKeyword
+      searchKeyword,
+      searchItems,
+      selectItems,
+      search,
+      pageChange
     }
   },
 })
@@ -46,20 +77,22 @@ export default defineComponent({
 
 <template>
   <div class="class">
+    <p>components<p>
     <div class="radio">
       <input type="radio" value="aa" id="aa" v-model="check" @change="switchSale">
       <label for="aa">出展物</label>
       <input type="radio" value="bb" id="bb" v-model="check" @change="switchSale">
       <label for="bb">サークル</label>
+      {{check}}
     </div>
     <div class="search">
-      <input type="text" :placeholder="text" v-model="keyword">
-      <button><i class="bi bi-search"></i></button>
+      <input type="text" :placeholder="text" v-model="searchKeyword" @keydown.enter="search">
+      <button @click="search"><i class="bi bi-search"></i></button>
     </div>
     <div class="select">
-      <label for="">絞り込み</label>
-      <select name="" id="">
-        <option selected>---Select---</option>
+      <label for="">絞り込み</label>{{selectItems}}
+      <select name="" id="" v-model="selectItems" @change="search">
+        <option value="">---Select---</option>
         <option disabled="disabled" value="0">---キャラクター---</option>
         <option value="1">人間</option>
         <option value="2">亜人</option>
@@ -70,9 +103,11 @@ export default defineComponent({
         <option value="6">アクセサリー</option>
       </select>
     </div>
-    <div class="check" v-if="saleCheck">
-      <input type="checkbox" id="check" class="checkbox">
-      <label for="check">販売している<br>出展物のみ</label>
+    <div class="check">
+      <div v-if="saleCheck">
+        <input type="checkbox" id="check" class="checkbox">
+        <label for="check">販売している<br>出展物のみ</label>
+      </div>
     </div>
     <div class="button">
       <a href="">♡ お気に入り</a>
@@ -90,8 +125,8 @@ export default defineComponent({
     box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
     position: sticky;
     top: 80px;
-    z-index: 4;
     height: 60px;
+    z-index: 3;
 }
 
 .radio > label {
@@ -133,6 +168,7 @@ export default defineComponent({
   height: 44px;
   font-size: 14px;
   padding: 8px 16px;
+  appearance: none;
 }
 
 .check {
@@ -188,7 +224,7 @@ input[type='checkbox']:checked::after {
   opacity: 1;
 }
 
-.check > label {
+.check > div > label {
   color: #333;
   font-size: 13px;
   line-height: 1.2;

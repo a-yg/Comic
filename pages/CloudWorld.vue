@@ -40,10 +40,10 @@ export default defineComponent({
       selectVenue.value = params.title
       switch(params.id) {
         case 1:
-          router.push({path: '/cloudworld', query:{ work_id:'disneyplus' }})
+          router.push({path: '/cloudworld/', query:{ work_id:'disneyplus' }})
           break
         case 2:
-          router.push({path: '/cloudworld', query:{ work_id:'beams' }})
+          router.push({path: '/cloudworld/', query:{ work_id:'beams' }})
           break
       }
       console.log(id);

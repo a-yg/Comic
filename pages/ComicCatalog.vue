@@ -2,6 +2,7 @@
 import { computed, defineComponent, onMounted, ref, useRouter } from '@nuxtjs/composition-api'
 import ComicHeader from './ComicHeader.vue'
 import ComicSearch from '../components/ComicSearch.vue'
+import axios from 'axios'
 
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
@@ -165,6 +166,17 @@ export default defineComponent({
       currentImageIndex.value = index
     }
 
+    const data = ref([])
+    onMounted(async() => {
+      const url = "https://jsonplaceholder.typicode.com/photos"
+      const res = await axios.get(url)
+      data.value = res.data.slice(0, 15)
+      console.log(data, "catalogdata")
+    })
+    // const onMoveHitCircle = () => {
+    //   router.push({path: 'hitcircle'})
+    // }
+ 
     
     return {
       check,
@@ -177,12 +189,14 @@ export default defineComponent({
       selectedFilterItem,
       filteredItems,
       searchItem,
+      // onMoveHitCircle,
 
       onClick,
       onText1Click,
       onText2Click,
       currentImageUrl,
       imageMouseOver,
+      data
     }
   },
 })
@@ -191,6 +205,8 @@ export default defineComponent({
 <template>
 <div>
 <ComicHeader style="box-shadow: none"/>
+<ComicSearch :data="data"/>
+<!-- @searchItems="onMoveHitCircle" -->
 <div class="class">
     <div class="radio">
       <input type="radio" value="aa" id="aa" v-model="check" @change="switchSale">

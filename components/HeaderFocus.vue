@@ -11,7 +11,6 @@ export default defineComponent({
       try {
         const res = await axios.get(url)
         data.value = res.data.slice(0, 3)
-        console.log(data.value, "data")
       } catch(e) {
         console.log("get失敗")
       }
@@ -19,7 +18,6 @@ export default defineComponent({
       try {
         const res2 = await axios.get(url)
         detail.value = res2.data.slice(0, 8)
-        console.log(detail.value, "detail")
       } catch(e) {
         console.log("get失敗")
       }
